@@ -168,7 +168,7 @@ Khaw.ZIndexBehavior = Enum.ZIndexBehavior.Global
 function Env:Window(meta)
 	local Title = meta.Title or "Title"
 	local Desc = meta.Desc or "Desc"
-	local Logo = meta.Logo or 87819836863434
+	local Logo = meta.Logo or 128185233852701
 
 	local Background_1 = Instance.new("Frame")
 	local DropShadow_1 = Instance.new("ImageLabel")
@@ -248,7 +248,7 @@ function Env:Window(meta)
 	Title_1.TextColor3 = Color3.fromRGB(255,255,255)
 	Title_1.TextSize = 26
 	Title_1.TextWrapped = true
-	Title_1.TextXAlignment = Enum.TextXAlignment.Center
+	Title_1.TextXAlignment = Enum.TextXAlignment.Left
 
 	UIListLayout_1.Parent = Header_1
 	UIListLayout_1.Padding = UDim.new(0,7)
@@ -282,7 +282,7 @@ function Env:Window(meta)
 	Desc_1.TextColor3 = Color3.fromRGB(255,255,255)
 	Desc_1.TextSize = 15
 	Desc_1.TextTransparency = 0.5
-	Desc_1.TextXAlignment = Enum.TextXAlignment.Center
+	Desc_1.TextXAlignment = Enum.TextXAlignment.Left
 
 	local CloseUI = Instance.new("TextButton")
 	local UICorner_1z = Instance.new("UICorner")
