@@ -185,9 +185,9 @@ function Env:Window(meta)
 	Background_1.Name = "Background"
 	Background_1.Parent = Khaw
 	Background_1.AnchorPoint = Vector2.new(0.5, 0.5)
-	Background_1.BackgroundColor3 = Color3.fromRGB(11, 239, 255)
+	Background_1.BackgroundColor3 = Color3.fromRGB(0,0,0)
 	Background_1.BackgroundTransparency = 0.5
-	Background_1.BorderColor3 = Color3.fromRGB(0, 119, 170)
+	Background_1.BorderColor3 = Color3.fromRGB(0,0,0)
 	Background_1.BorderSizePixel = 0
 	Background_1.Position = UDim2.new(0.5, 0,0.5, 0)
 	Background_1.Size = UDim2.new(0, 0,0, 0)
@@ -293,8 +293,8 @@ function Env:Window(meta)
 	CloseUI.Name = "CloseUI"
 	CloseUI.Parent = Khaw
 	CloseUI.AnchorPoint = Vector2.new(0, 1)
-	CloseUI.BackgroundColor3 = Color3.fromRGB(4, 106, 137)
-	CloseUI.BorderColor3 = Color3.fromRGB(0, 79, 250)
+	CloseUI.BackgroundColor3 = Color3.fromRGB(0,0,0)
+	CloseUI.BorderColor3 = Color3.fromRGB(0,0,0)
 	CloseUI.BorderSizePixel = 0
 	CloseUI.Position = UDim2.new(0.06, 0,0.21, 0)
 	CloseUI.Size = UDim2.new(0, 50,0, 50)
@@ -308,17 +308,17 @@ function Env:Window(meta)
 
 	Icon_1.Name = "Icon"
 	Icon_1.Parent = CloseUI
-	Icon_1.BackgroundColor3 = Color3.fromRGB(87, 188, 231)
-	Icon_1.BorderColor3 = Color3.fromRGB(104, 121, 249)
+	Icon_1.BackgroundColor3 = Color3.fromRGB(22,22,22)
+	Icon_1.BorderColor3 = Color3.fromRGB(0,0,0)
 	Icon_1.BorderSizePixel = 0
 	Icon_1.Size = UDim2.new(0, 50,0, 50)
 	Icon_1.BackgroundTransparency = 1
 
 	ImageLabel.Parent = Icon_1
 	ImageLabel.AnchorPoint = Vector2.new(0.5, 0.5)
-	ImageLabel.BackgroundColor3 = Color3.fromRGB(23, 243, 255)
+	ImageLabel.BackgroundColor3 = Color3.fromRGB(255,255,255)
 	ImageLabel.BackgroundTransparency = 1
-	ImageLabel.BorderColor3 = Color3.fromRGB(26, 186, 255)
+	ImageLabel.BorderColor3 = Color3.fromRGB(0,0,0)
 	ImageLabel.BorderSizePixel = 0
 	ImageLabel.Position = UDim2.new(0.5, 0,0.5, 0)
 	ImageLabel.Size = UDim2.new(0, 45,0, 45)
@@ -809,9 +809,9 @@ function Env:Window(meta)
 			end
 		end
 
-		Env.section = {}
+		Env.Section = {}
 
-		function Env.section:section(meta)
+		function Env.Section:Section(meta)
 
 			local Title = meta.Title or "Section"
 			local Side = meta.Side or "l"
@@ -875,7 +875,7 @@ function Env:Window(meta)
 
 			Env._Class = {}
 
-			function Env._Class:button(meta)
+			function Env._Class:Button(meta)
 
 				local Title = meta.Title
 				local Desc = meta.Desc or nil
@@ -1103,7 +1103,7 @@ function Env:Window(meta)
 				end
 			end
 
-			function Env._Class:thumbimg(meta)
+			function Env._Class:ThumnailsImage(meta)
 				local Banner = meta.Banner
 				local Y = meta.SizeY or 150
 
@@ -1419,7 +1419,7 @@ function Env:Window(meta)
 				
 			end
 
-			function Env._Class:toggle(meta)
+			function Env._Class:Toggle(meta)
 				local Title = meta.Title
 				local Desc = meta.Desc
 				local Icon = meta.Icon or nil
@@ -1971,37 +1971,37 @@ function Env:Window(meta)
 				return Index
 			end
 
-			function Env._Class:input(meta)
+			function Env._Class:Textbox(meta)
 				
 				local Value = meta.Value or "Example"
 				local PlaceHolder = meta.PlaceHolder or "Place"
 				local ClearOnFocus = meta.ClearOnFocus or false
 				local Callback = meta.Callback
 				
-				local input = Instance.new("Frame")
+				local Textbox = Instance.new("Frame")
 				local UICorner_1 = Instance.new("UICorner")
 				local ImageLabel_1 = Instance.new("ImageLabel")
 				local UIGradient_1 = Instance.new("UIGradient")
-				local Edit_1 = Instance.new("input")
+				local Edit_1 = Instance.new("TextBox")
 				local UICorner_2 = Instance.new("UICorner")
 				local UIStroke_1 = Instance.new("UIStroke")
 				local UIGradient_2 = Instance.new("UIGradient")
 				local UIGradient_3 = Instance.new("UIGradient")
 
-				input.Name = "input"
-				input.Parent = Section_1
-				input.AnchorPoint = Vector2.new(0.5, 0.5)
-				input.BackgroundColor3 = Color3.fromRGB(0,0,0)
-				input.BackgroundTransparency = 0.5
-				input.BorderColor3 = Color3.fromRGB(0,0,0)
-				input.BorderSizePixel = 0
-				input.Size = UDim2.new(0.970000029, 0,0, 40)
-				input.ClipsDescendants = true
+				Textbox.Name = "Textbox"
+				Textbox.Parent = Section_1
+				Textbox.AnchorPoint = Vector2.new(0.5, 0.5)
+				Textbox.BackgroundColor3 = Color3.fromRGB(0,0,0)
+				Textbox.BackgroundTransparency = 0.5
+				Textbox.BorderColor3 = Color3.fromRGB(0,0,0)
+				Textbox.BorderSizePixel = 0
+				Textbox.Size = UDim2.new(0.970000029, 0,0, 40)
+				Textbox.ClipsDescendants = true
 
-				UICorner_1.Parent = input
+				UICorner_1.Parent = Textbox
 				UICorner_1.CornerRadius = UDim.new(0,5)
 
-				ImageLabel_1.Parent = input
+				ImageLabel_1.Parent = Textbox
 				ImageLabel_1.AnchorPoint = Vector2.new(0.5, 0.5)
 				ImageLabel_1.BackgroundColor3 = Color3.fromRGB(255,255,255)
 				ImageLabel_1.BackgroundTransparency = 1
@@ -2017,7 +2017,7 @@ function Env:Window(meta)
 				UIGradient_1.Color = ColorSequence.new{ColorSequenceKeypoint.new(0, Color3.fromRGB(0, 255, 127)), ColorSequenceKeypoint.new(0.482699, Color3.fromRGB(0, 170, 255)), ColorSequenceKeypoint.new(1, Color3.fromRGB(85, 85, 255))}
 
 				Edit_1.Name = "Edit"
-				Edit_1.Parent = input
+				Edit_1.Parent = Textbox
 				Edit_1.Active = true
 				Edit_1.AnchorPoint = Vector2.new(0.5, 0.5)
 				Edit_1.BackgroundColor3 = Color3.fromRGB(255,255,255)
@@ -2083,13 +2083,13 @@ function Env:Window(meta)
 				end
 
 				function Index:Visible(v)
-					input.Visible = v
+					Textbox.Visible = v
 				end
 
 				return Index
 			end
 
-			function Env._Class:slide(info)
+			function Env._Class:Slider(info)
 				local Title = info.Title
 				local Desc = info.Desc
 				local Min = info.Min or 0
@@ -2108,7 +2108,7 @@ function Env:Window(meta)
 				local BarValue_1 = Instance.new("Frame")
 				local UICorner_3 = Instance.new("UICorner")
 				local UIGradient_2 = Instance.new("UIGradient")
-				local ValueBox_1 = Instance.new("input")
+				local ValueBox_1 = Instance.new("TextBox")
 				local UICorner_4 = Instance.new("UICorner")
 				local Slide = click(Bar_1)
 
@@ -2290,7 +2290,7 @@ function Env:Window(meta)
 				return NewValue
 			end
 
-			function Env._Class:drop(info)
+			function Env._Class:Dropdown(info)
 				local Title = info.Title
 				local List = info.List
 				local Value = info.Value
@@ -2399,7 +2399,7 @@ function Env:Window(meta)
 				local Line_1 = Instance.new("Frame")
 				local UIGradient_1 = Instance.new("UIGradient")
 				local Body_1 = Instance.new("Frame")
-				local Search_1 = Instance.new("input")
+				local Search_1 = Instance.new("TextBox")
 				local UICorner_2 = Instance.new("UICorner")
 				local UIGradient_2 = Instance.new("UIGradient")
 				local UIStroke_1 = Instance.new("UIStroke")
@@ -2896,7 +2896,7 @@ function Env:Window(meta)
 				return itemslist
 			end
 
-			function Env._Class:keybind(info)
+			function Env._Class:Keybind(info)
 				local Title = info.Title
 				local Key = info.Key or Enum.KeyCode.Q
 				local Value = info.Value or false
