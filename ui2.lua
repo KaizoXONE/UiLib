@@ -31,6 +31,9 @@ function MakeDraggable(topbarobject, object)
 			Dragging = true;
 			DragStart = input.Position;
 			StartPosition = object.Position;
+			object.AttributeChanged:Connect(function(attr)
+				if attr == "IsDragging" then return end
+			end)
 			input.Changed:Connect(function()
 				if input.UserInputState == Enum.UserInputState.End then
 					Dragging = false;
@@ -45,6 +48,11 @@ function MakeDraggable(topbarobject, object)
 	end);
 	UserInputService.InputChanged:Connect(function(input)
 		if input == DragInput and Dragging then
+			local mousePos = UserInputService:GetMouseLocation()
+			local delta = input.Position - DragStart
+			if delta.Magnitude > 5 then
+				object:SetAttribute("IsDragging", true)
+			end
 			Update(input);
 		end;
 	end);
@@ -74,8 +82,12 @@ ImageButton.Image = "rbxassetid://105059922903197";
 ImageButton.AutoButtonColor = false;
 MakeDraggable(ImageButton, OutlineButton);
 CreateRounded(ImageButton, 10);
-ImageButton.MouseButton1Click:connect(function()
-	(game.CoreGui:FindFirstChild("STELLAR")).Enabled = not (game.CoreGui:FindFirstChild("STELLAR")).Enabled;
+ImageButton.MouseButton1Up:Connect(function()
+	wait(0.05) -- Small delay to let Attribute update
+	if not OutlineButton:GetAttribute("IsDragging") then
+		(game.CoreGui:FindFirstChild("STELLAR")).Enabled = not (game.CoreGui:FindFirstChild("STELLAR")).Enabled;
+	end
+	OutlineButton:SetAttribute("IsDragging", false)
 end);
 local NotificationFrame = Instance.new("ScreenGui");
 NotificationFrame.Name = "NotificationFrame";
@@ -98,7 +110,9 @@ spawn(function()
 		end;
 	end;
 end);
-local Update = {};
+local Update = {
+	Values = {}
+};
 function Update:Notify(desc)
 	local Frame = Instance.new("Frame");
 	local Image = Instance.new("ImageLabel");
@@ -396,7 +410,7 @@ function Update:Window(Config)
 	NameHub.Size = UDim2.new(0, 1, 0, 25);
 	NameHub.Font = Enum.Font.GothamBold;
 	NameHub.Text = Config.Title;
-	NameHub.TextSize = 20;
+	NameHub.TextSize = 18;
 	NameHub.TextColor3 = Color3.fromRGB(255, 255, 255);
 	NameHub.TextXAlignment = Enum.TextXAlignment.Left;
 	local nameHubSize = (game:GetService("TextService")):GetTextSize(NameHub.Text, NameHub.TextSize, NameHub.Font, Vector2.new(math.huge, math.huge));
@@ -1016,7 +1030,7 @@ function Update:Window(Config)
 			Title2.Font = Enum.Font.Cartoon;
 			Title2.Text = text;
 			Title2.TextColor3 = Color3.fromRGB(255, 255, 255);
-			Title2.TextSize = 15;
+			Title2.TextSize = 14;
 			Title2.TextXAlignment = Enum.TextXAlignment.Left;
 			Title2.AnchorPoint = Vector2.new(0, 0.5);
 			Desc.Parent = Title2;
@@ -1036,7 +1050,7 @@ function Update:Window(Config)
 				Button.Size = UDim2.new(1, 0, 0, 36);
 			end;
 			Desc.TextColor3 = Color3.fromRGB(150, 150, 150);
-			Desc.TextSize = 10;
+			Desc.TextSize = 11;
 			Desc.TextXAlignment = Enum.TextXAlignment.Left;
 			ToggleFrame.Name = "ToggleFrame";
 			ToggleFrame.Parent = Button;
@@ -1131,7 +1145,7 @@ function Update:Window(Config)
 			DropTitle.Font = Enum.Font.Cartoon;
 			DropTitle.Text = text;
 			DropTitle.TextColor3 = Color3.fromRGB(255, 255, 255);
-			DropTitle.TextSize = 15;
+			DropTitle.TextSize = 14;
 			DropTitle.TextXAlignment = Enum.TextXAlignment.Left;
 			DropTitle.Position = UDim2.new(0, 15, 0, 5);
 			DropTitle.AnchorPoint = Vector2.new(0, 0);
@@ -1421,7 +1435,7 @@ function Update:Window(Config)
 			Title.Text = text;
 			Title.AnchorPoint = Vector2.new(0, 0.5);
 			Title.TextColor3 = Color3.fromRGB(255, 255, 255);
-			Title.TextSize = 15;
+			Title.TextSize = 14;
 			Title.TextXAlignment = Enum.TextXAlignment.Left;
 			ValueText.Parent = bar;
 			ValueText.BackgroundColor3 = Color3.fromRGB(150, 150, 150);
@@ -1536,7 +1550,7 @@ function Update:Window(Config)
 			TextboxLabel.Font = Enum.Font.Nunito;
 			TextboxLabel.AnchorPoint = Vector2.new(0, 0.5);
 			TextboxLabel.TextColor3 = Color3.fromRGB(255, 255, 255);
-			TextboxLabel.TextSize = 15;
+			TextboxLabel.TextSize = 14;
 			TextboxLabel.TextTransparency = 0;
 			TextboxLabel.TextXAlignment = Enum.TextXAlignment.Left;
 			RealTextbox.Name = "RealTextbox";
@@ -1547,13 +1561,10 @@ function Update:Window(Config)
 			RealTextbox.AnchorPoint = Vector2.new(1, 0.5);
 			RealTextbox.Size = UDim2.new(0, 80, 0, 25);
 			RealTextbox.Font = Enum.Font.Gotham;
-			RealTextbox.Text = "";
-			RealTextbox.TextColor3 = Color3.fromRGB(225, 225, 225);
-			RealTextbox.TextSize = 11;
-			RealTextbox.TextTransparency = 0;
-			RealTextbox.ClipsDescendants = true;
+			RealTextbox.Text = Update.Values[text] or "";
 			RealTextbox.PlaceholderText = placeholder;
 			RealTextbox.FocusLost:Connect(function()
+				Update.Values[text] = RealTextbox.Text;
 				callback(RealTextbox.Text);
 			end);
 			UICorner.CornerRadius = UDim.new(0, 5);
@@ -1578,7 +1589,7 @@ function Update:Window(Config)
 			Label.Position = UDim2.new(0, 30, 0.5, 0);
 			Label.AnchorPoint = Vector2.new(0, 0.5);
 			Label.TextColor3 = Color3.fromRGB(225, 225, 225);
-			Label.TextSize = 15;
+			Label.TextSize = 14;
 			Label.Text = text;
 			Label.TextXAlignment = Enum.TextXAlignment.Left;
 			local ImageLabel = Instance.new("ImageLabel");
