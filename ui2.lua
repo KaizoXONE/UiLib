@@ -320,6 +320,7 @@ function Update:Window(Config)
 	local osfunc = {};
 	local uihide = false;
 	local abc = false;
+	local minimized = false;
 	local currentpage = "";
 	local keybind = keybind or Enum.KeyCode.RightControl;
 	local yoo = string.gsub(tostring(keybind), "Enum.KeyCode.", "");
@@ -687,8 +688,25 @@ function Update:Window(Config)
 	UIPageLayout.TouchInputEnabled = false;
 	MakeDraggable(Top, OutlineMain);
 	UserInputService.InputBegan:Connect(function(input)
-		if input.KeyCode == Enum.KeyCode.Insert then
-			(game.CoreGui:FindFirstChild("STELLAR")).Enabled = not (game.CoreGui:FindFirstChild("STELLAR")).Enabled;
+		if input.KeyCode == Enum.KeyCode.Insert or input.KeyCode == Enum.KeyCode.LeftControl then
+			minimized = not minimized
+			if minimized then
+				TweenService:Create(OutlineMain, TweenInfo.new(0.4, Enum.EasingStyle.Back, Enum.EasingDirection.In), {
+					Size = UDim2.new(0, 0, 0, 0),
+					BackgroundTransparency = 1
+				}):Play()
+				TweenService:Create(Main, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
+					BackgroundTransparency = 1
+				}):Play()
+			else
+				TweenService:Create(OutlineMain, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
+					Size = UDim2.new(0, WindowConfig.Size.X.Offset + 15, 0, WindowConfig.Size.Y.Offset + 15),
+					BackgroundTransparency = 0.4
+				}):Play()
+				TweenService:Create(Main, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+					BackgroundTransparency = 0.15
+				}):Play()
+			end
 		end;
 	end);
 	local Dragging = false;
@@ -711,7 +729,9 @@ function Update:Window(Config)
 		end;
 	end);
 	local uitab = {};
-	function uitab:Tab(text, img)
+	function uitab:Tab(Config)
+		local text = Config.Name or Config.Title or "Tab"
+		local img = Config.Icon or Config.Image or ""
 		local BtnStroke = Instance.new("UIStroke");
 		local TabButton = Instance.new("TextButton");
 		local title = Instance.new("TextLabel");
@@ -878,7 +898,9 @@ function Update:Window(Config)
 			end;
 		end);
 		local main = {};
-		function main:Button(text, callback)
+		function main:Button(Config)
+			local text = Config.Name or Config.Title or "Button"
+			local callback = Config.Callback or function() end
 			local Button = Instance.new("Frame");
 			local UICorner = Instance.new("UICorner");
 			local TextLabel = Instance.new("TextLabel");
@@ -955,7 +977,11 @@ function Update:Window(Config)
 				callback();
 			end);
 		end;
-		function main:Toggle(text, config, desc, callback)
+		function main:Toggle(Config)
+			local text = Config.Name or Config.Title or "Toggle"
+			local config = Config.Value or Config.Default or false
+			local desc = Config.Desc or Config.Description or nil
+			local callback = Config.Callback or function() end
 			config = config or false;
 			local toggled = config;
 			local UICorner = Instance.new("UICorner");
@@ -1068,7 +1094,11 @@ function Update:Window(Config)
 				pcall(callback, toggled);
 			end;
 		end;
-		function main:Dropdown(text, option, var, callback)
+		function main:Dropdown(Config)
+			local text = Config.Name or Config.Title or "Dropdown"
+			local option = Config.Options or Config.List or {}
+			local var = Config.Value or Config.Default or nil
+			local callback = Config.Callback or function() end
 			local isdropping = false;
 			local Dropdown = Instance.new("Frame");
 			local DropdownFrameScroll = Instance.new("Frame");
@@ -1338,7 +1368,12 @@ function Update:Window(Config)
 			end;
 			return dropfunc;
 		end;
-		function main:Slider(text, min, max, set, callback)
+		function main:Slider(Config)
+			local text = Config.Name or Config.Title or "Slider"
+			local min = Config.Min or 0
+			local max = Config.Max or 100
+			local set = Config.Value or Config.Default or 50
+			local callback = Config.Callback or function() end
 			local Slider = Instance.new("Frame");
 			local slidercorner = Instance.new("UICorner");
 			local sliderr = Instance.new("Frame");
@@ -1453,7 +1488,7 @@ function Update:Window(Config)
 				end;
 			end);
 			UserInputService.InputChanged:Connect(function(Input)
-				if Dragging and (Input.UserInputType == Enum.UserInputType.MouseMovement or Input.UserInputType == Enum.UserInputType.Touch) then
+				if Dragging and (Input.UserInputType == Enum.UserInputType.MouseMovement or Input.UserInputType.Touch) then
 					local SizeX = math.clamp((Input.Position.X - bar.AbsolutePosition.X) / bar.AbsoluteSize.X, 0, 1)
 					Value = math.floor(min + (max - min) * SizeX)
 					pcall(function()
@@ -1461,19 +1496,22 @@ function Update:Window(Config)
 					end);
 					ValueText.Text = Value;
 					
-					-- Smooth Bar Update
-					TweenService:Create(bar1, TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+					-- WindUI Style: Bounce effect on bar
+					TweenService:Create(bar1, TweenInfo.new(0.15, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
 						Size = UDim2.new(SizeX, 0, 0, 4)
 					}):Play();
 					
 					-- Smooth Circle Update
-					TweenService:Create(circlebar, TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-						Position = UDim2.new(SizeX, 0, 0, -5)
+					TweenService:Create(circlebar, TweenInfo.new(0.15, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
+						Position = UDim2.new(1, 0, 0, -5)
 					}):Play();
 				end;
 			end);
 		end;
-		function main:Textbox(text, disappear, callback)
+		function main:Textbox(Config)
+			local text = Config.Name or Config.Title or "Textbox"
+			local placeholder = Config.Placeholder or Config.Desc or "Enter text..."
+			local callback = Config.Callback or function() end
 			local Textbox = Instance.new("Frame");
 			local TextboxCorner = Instance.new("UICorner");
 			local TextboxLabel = Instance.new("TextLabel");
@@ -1514,6 +1552,7 @@ function Update:Window(Config)
 			RealTextbox.TextSize = 11;
 			RealTextbox.TextTransparency = 0;
 			RealTextbox.ClipsDescendants = true;
+			RealTextbox.PlaceholderText = placeholder;
 			RealTextbox.FocusLost:Connect(function()
 				callback(RealTextbox.Text);
 			end);
